@@ -1,8 +1,10 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { Banknote, Check, CreditCard, Loader2, Sparkles } from "lucide-react";
 import { useBookingStore, useBookingTotals } from "@/stores/booking-store";
+import { useAuthStore } from "@/stores/auth-store";
 import { createBooking } from "@/server/actions";
 import { BRAND, whatsappHref } from "@/lib/brand";
 import { cn, formatINR } from "@/lib/utils";
@@ -30,6 +32,8 @@ function buildWhatsAppBookingMessage(params: {
   date: string;
   slot: string;
   beauticianName: string;
+  customerName?: string;
+  customerPhone?: string;
   address: {
     label: string;
     line1: string;
@@ -41,15 +45,18 @@ function buildWhatsAppBookingMessage(params: {
   paymentMethod: "razorpay" | "pay-after";
   total: number;
 }) {
-  const addOnLine =
-    params.addOns.length > 0 ? params.addOns.join(", ") : "None";
+  const addOnLine = params.addOns.length > 0 ? params.addOns.join(", ") : "None";
   const paymentLabel =
-    params.paymentMethod === "razorpay" ? "Pay Online" : "Pay After Service";
+    params.paymentMethod === "razorpay"
+      ? `Pay Online — ${BRAND.paymentUrl}`
+      : "Pay After Service";
 
   return [
     `Hi GlamNest! I'd like to confirm this booking:`,
     ``,
     `*Booking ID:* ${params.bookingId}`,
+    params.customerName ? `*Customer:* ${params.customerName}` : null,
+    params.customerPhone ? `*Phone:* +91 ${params.customerPhone}` : null,
     `*Service:* ${params.serviceName}`,
     `*Package:* ${params.packageName}`,
     `*Add-ons:* ${addOnLine}`,
@@ -70,14 +77,17 @@ function buildWhatsAppBookingMessage(params: {
 export function StepPayment() {
   const store = useBookingStore();
   const { total } = useBookingTotals();
+  const user = useAuthStore((s) => s.user);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const { service, servicePackage, addOns, address, date, slot, beautician, couponCode, paymentMethod } = store;
+  const { service, servicePackage, addOns, address, date, slot, beautician, couponCode, paymentMethod } =
+    store;
   if (!service || !servicePackage || !address || !date || !slot || !beautician) return null;
 
   async function confirmBooking() {
     if (!service || !servicePackage || !address || !date || !slot || !beautician || !paymentMethod) return;
+
     setSubmitting(true);
     setError(null);
     try {
@@ -99,32 +109,38 @@ export function StepPayment() {
         paymentMethod,
         total,
       });
-      if (result.ok) {
-        const message = buildWhatsAppBookingMessage({
-          bookingId: result.bookingId,
-          serviceName: service.name,
-          packageName: servicePackage.name,
-          addOns: addOns.map((a) => a.name),
-          date,
-          slot,
-          beauticianName: beautician.name,
-          address,
-          couponCode,
-          paymentMethod,
-          total,
-        });
-        const waUrl = whatsappHref(message);
-        store.reset();
-        if (paymentMethod === "razorpay") {
-          window.open(waUrl, "_blank", "noopener,noreferrer");
-          window.location.href = BRAND.paymentUrl;
-          return;
-        }
-        window.location.href = waUrl;
+      if (!result.ok) {
+        setError(result.error);
+        setSubmitting(false);
         return;
       }
-      setError(result.error);
-      setSubmitting(false);
+
+      const message = buildWhatsAppBookingMessage({
+        bookingId: result.bookingId,
+        serviceName: service.name,
+        packageName: servicePackage.name,
+        addOns: addOns.map((a) => a.name),
+        date,
+        slot,
+        beauticianName: beautician.name,
+        customerName: user?.name,
+        customerPhone: user?.phone,
+        address,
+        couponCode,
+        paymentMethod,
+        total,
+      });
+
+      const waUrl = whatsappHref(message);
+      store.reset();
+
+      if (paymentMethod === "razorpay") {
+        window.open(waUrl, "_blank", "noopener,noreferrer");
+        window.location.href = BRAND.paymentUrl;
+        return;
+      }
+
+      window.location.href = waUrl;
     } catch {
       setError("Something went wrong while confirming. Please try again.");
       setSubmitting(false);
@@ -136,11 +152,19 @@ export function StepPayment() {
       <StepHeader
         eyebrow="Step 8 · Payment"
         title="How would you like to pay?"
-        description="Both options are safe — pay now for instant confirmation and cashback, or settle after your service."
+        description="No account needed to book — pay now online, or settle after your service."
       />
 
+      <p className="mb-5 rounded-2xl bg-cream-100 px-4 py-3 text-sm text-ink-600">
+        Guests can book and pay without signing in. Sign in later to view history, saved addresses and
+        receipts in{" "}
+        <Link href="/account" className="font-semibold text-gold-700 underline-offset-2 hover:underline">
+          My Account
+        </Link>
+        .
+      </p>
+
       <div className="grid gap-4 sm:grid-cols-2">
-        {/* Razorpay */}
         <button
           type="button"
           onClick={() => store.setPaymentMethod("razorpay")}
@@ -172,19 +196,16 @@ export function StepPayment() {
               <Check className="size-3.5" />
             </span>
           </span>
-          <span className="mt-4 font-display text-lg font-semibold text-ink-950">
-            Pay Online
-          </span>
+          <span className="mt-4 font-display text-lg font-semibold text-ink-950">Pay Online</span>
           <span className="mt-1 text-sm text-ink-500">
-            UPI, credit & debit cards, netbanking and wallets — 100% secure.
+            Secure checkout — you’ll be redirected to complete payment.
           </span>
           <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700">
             <Sparkles className="size-3.5" />
-            Instant secure checkout
+            Instant redirect to payment page
           </span>
         </button>
 
-        {/* Pay after service */}
         <button
           type="button"
           onClick={() => store.setPaymentMethod("pay-after")}
@@ -213,7 +234,7 @@ export function StepPayment() {
           </span>
           <span className="mt-4 font-display text-lg font-semibold text-ink-950">Pay After Service</span>
           <span className="mt-1 text-sm text-ink-500">
-            Relax first, pay later — cash or UPI directly to GlamNest once you are glowing.
+            Book now with no advance — pay cash or UPI once you are glowing.
           </span>
           <span className="mt-3 text-xs font-medium text-ink-400">No advance needed</span>
         </button>
@@ -258,7 +279,7 @@ export function StepPayment() {
 
       <p className="mt-4 text-center text-xs text-ink-400">
         {paymentMethod === "razorpay"
-          ? "You’ll be redirected to our secure payment page to complete your booking."
+          ? "You’ll be redirected to our secure payment page. Booking details also open in WhatsApp."
           : "Your booking details will open in WhatsApp so you can share them with our team."}{" "}
         Free rescheduling up to 4 hours before your slot.
       </p>

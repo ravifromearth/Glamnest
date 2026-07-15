@@ -8,6 +8,7 @@ import { Logo } from "./logo";
 import { Button } from "@/components/ui/button";
 import { CATEGORIES } from "@/lib/catalog";
 import { BRAND } from "@/lib/brand";
+import { useAuthStore } from "@/stores/auth-store";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -24,6 +25,9 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [servicesOpen, setServicesOpen] = React.useState(false);
   const pathname = usePathname();
+  const user = useAuthStore((s) => s.user);
+  const hydrated = useAuthStore((s) => s.hydrated);
+  const signOut = useAuthStore((s) => s.signOut);
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -129,11 +133,29 @@ export function Header() {
               <Phone className="size-4 text-gold-600" />
               {BRAND.phone}
             </a>
-            <Link href="/account" className="hidden md:block">
-              <Button variant="outline" size="sm" className="h-10 px-5">
-                Sign In
-              </Button>
-            </Link>
+            {hydrated && user ? (
+              <>
+                <Link href="/account" className="hidden md:block">
+                  <Button variant="outline" size="sm" className="h-10 px-5">
+                    {user.name.split(" ")[0]}
+                  </Button>
+                </Link>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="hidden h-10 px-3 md:inline-flex"
+                  onClick={() => signOut()}
+                >
+                  Sign Out
+                </Button>
+              </>
+            ) : (
+              <Link href="/signin" className="hidden md:block">
+                <Button variant="outline" size="sm" className="h-10 px-5">
+                  Sign In
+                </Button>
+              </Link>
+            )}
             <Link href="/booking">
               <Button variant="gold" size="sm" className="h-10 px-5">
                 Book Now
@@ -191,9 +213,20 @@ export function Header() {
               </Link>
             ))}
             <div className="mt-3 flex gap-2 px-1 pb-2">
-              <Link href="/account" className="flex-1">
-                <Button variant="outline" className="w-full">Sign In</Button>
-              </Link>
+              {hydrated && user ? (
+                <>
+                  <Link href="/account" className="flex-1">
+                    <Button variant="outline" className="w-full">Account</Button>
+                  </Link>
+                  <Button variant="ghost" className="flex-1" onClick={() => signOut()}>
+                    Sign Out
+                  </Button>
+                </>
+              ) : (
+                <Link href="/signin" className="flex-1">
+                  <Button variant="outline" className="w-full">Sign In</Button>
+                </Link>
+              )}
               <Link href="/booking" className="flex-1">
                 <Button variant="gold" className="w-full">Book Now</Button>
               </Link>

@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { buildMetadata } from "@/lib/seo";
 import { formatINR } from "@/lib/utils";
+import { AccountGreeting } from "@/components/auth/account-header";
 import { Avatar } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -51,15 +52,7 @@ const RECENT_ACTIVITY = [
 export default function AccountOverviewPage() {
   return (
     <div className="space-y-8">
-      <header>
-        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-gold-600">Overview</p>
-        <h1 className="mt-2 font-display text-3xl font-bold leading-tight text-ink-950 md:text-4xl">
-          Good to see you, Ananya
-        </h1>
-        <p className="mt-2 text-sm text-ink-500 md:text-base">
-          Your glow, on schedule — here&apos;s everything at a glance.
-        </p>
-      </header>
+      <AccountGreeting />
 
       {/* Next booking */}
       <section
