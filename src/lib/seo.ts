@@ -148,13 +148,16 @@ export const SEO_LANDING_PAGES = [
   { intent: "spa-at-home", label: "Spa at Home", serviceHint: "spa-wellness" },
 ] as const;
 
-export const SEO_CITY_SLUGS = ["patna", "bangalore", "muzaffarpur", "Jamui", "bhagalpur"] as const;
+/** Must match `CITIES[].slug` (lowercase) — never use display names. */
+export const SEO_CITY_SLUGS = ["patna", "bangalore", "muzaffarpur", "jamui", "bhagalpur"] as const;
 
 export function allSeoLandingSlugs() {
   const slugs: string[] = [];
   for (const page of SEO_LANDING_PAGES) {
-    for (const city of SEO_CITY_SLUGS) {
-      slugs.push(`${page.intent}-${city}`);
+    for (const citySlug of SEO_CITY_SLUGS) {
+      // Skip if a city was removed from CITIES to avoid broken prerenders
+      if (!CITIES.some((c) => c.slug === citySlug)) continue;
+      slugs.push(`${page.intent}-${citySlug}`);
     }
   }
   return slugs;
@@ -162,11 +165,11 @@ export function allSeoLandingSlugs() {
 
 export function parseSeoLandingSlug(slug: string) {
   for (const page of SEO_LANDING_PAGES) {
-    for (const city of SEO_CITY_SLUGS) {
-      if (slug === `${page.intent}-${city}`) {
-        const cityInfo = CITIES.find((c) => c.slug === city)!;
-        return { page, city: cityInfo };
-      }
+    for (const citySlug of SEO_CITY_SLUGS) {
+      if (slug !== `${page.intent}-${citySlug}`) continue;
+      const cityInfo = CITIES.find((c) => c.slug === citySlug);
+      if (!cityInfo) return null;
+      return { page, city: cityInfo };
     }
   }
   return null;

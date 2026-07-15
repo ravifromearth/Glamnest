@@ -55,7 +55,7 @@ export const CITIES: City[] = [
   { name: "Patna", state: "Bihar", slug: "patna", status: "live", latitude: 25.5941, longitude: 85.1376 },
   { name: "Bangalore", state: "Karnataka", slug: "bangalore", status: "live", latitude: 12.9716, longitude: 77.5946 },
   { name: "Muzaffarpur", state: "Bihar", slug: "muzaffarpur", status: "coming-soon", latitude: 26.1225, longitude: 85.3906 },
-  { name: "Jamui", state: "Bihar", slug: "jamui", status: "coming-soon", latitude: 24.7914, longitude: 85.0002 },
+  { name: "Jamui", state: "Bihar", slug: "jamui", status: "coming-soon", latitude: 24.9259, longitude: 86.2257 },
   { name: "Bhagalpur", state: "Bihar", slug: "bhagalpur", status: "coming-soon", latitude: 25.2425, longitude: 86.9842 },
   { name: "Ranchi", state: "Jharkhand", slug: "ranchi", status: "coming-soon", latitude: 23.3441, longitude: 85.3096 },
   { name: "Varanasi", state: "Uttar Pradesh", slug: "varanasi", status: "coming-soon", latitude: 25.3176, longitude: 82.9739 },
