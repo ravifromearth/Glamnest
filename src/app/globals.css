@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+/* ============================================================
+   GLAMNEST DESIGN TOKENS — "Beauty Comes Home"
+   Luxury startup aesthetic: ink, gold, cream, glass.
+   ============================================================ */
+
+@theme {
+  /* Brand palette */
+  --color-ink-950: #0f0f0f;
+  --color-ink-900: #191919;
+  --color-ink-800: #262626;
+  --color-ink-700: #3d3d3d;
+  --color-ink-600: #525252;
+  --color-ink-500: #6f6f6f;
+  --color-ink-400: #a1a1a1;
+  --color-ink-300: #cfcfcf;
+
+  --color-gold-200: #f1e3b1;
+  --color-gold-300: #e9d386;
+  --color-gold-400: #dfc15c;
+  --color-gold-500: #d4af37;
+  --color-gold-600: #b8962b;
+  --color-gold-700: #8f7420;
+
+  --color-cream-50: #fcfaf6;
+  --color-cream-100: #f8f5ef;
+  --color-cream-200: #f0eadd;
+  --color-cream-300: #e4dac4;
+
+  --color-blush-100: #f9edea;
+  --color-blush-300: #e8c4bb;
+  --color-blush-500: #c98a7d;
+
+  /* Typography */
+  --font-display: var(--font-playfair), "Playfair Display", Georgia, serif;
+  --font-sans: var(--font-inter), "Inter", system-ui, sans-serif;
+
+  /* Elevation */
+  --shadow-soft: 0 8px 30px rgb(15 15 15 / 0.06);
+  --shadow-lift: 0 18px 50px rgb(15 15 15 / 0.12);
+  --shadow-gold: 0 10px 34px rgb(212 175 55 / 0.28);
+
+  /* Motion */
+  --ease-luxe: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-shimmer: shimmer 2.4s linear infinite;
+  --animate-float: float 7s ease-in-out infinite;
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes shimmer {
+    from { background-position: 200% 0; }
+    to { background-position: -200% 0; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+  @keyframes marquee {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+}
+
+/* ---------- Base ---------- */
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-cream-50);
+  color: var(--color-ink-950);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background-color: var(--color-gold-500);
+  color: var(--color-ink-950);
+}
+
+/* ---------- Utilities ---------- */
+
+@utility font-display {
+  font-family: var(--font-display);
+}
+
+/* Frosted glass panel */
+@utility glass {
+  background: rgb(255 255 255 / 0.72);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+  border: 1px solid rgb(255 255 255 / 0.55);
+}
+
+@utility glass-dark {
+  background: rgb(15 15 15 / 0.62);
+  backdrop-filter: blur(18px) saturate(140%);
+  -webkit-backdrop-filter: blur(18px) saturate(140%);
+  border: 1px solid rgb(255 255 255 / 0.08);
+}
+
+/* Gold gradient text */
+@utility text-gold-gradient {
+  background: linear-gradient(115deg, #8f7420 0%, #d4af37 40%, #f1e3b1 55%, #d4af37 70%, #8f7420 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Hairline gold border */
+@utility ring-gold-hairline {
+  box-shadow: inset 0 0 0 1px rgb(212 175 55 / 0.45);
+}
+
+/* Container rhythm */
+@utility container-gn {
+  margin-inline: auto;
+  width: 100%;
+  max-width: 76rem;
+  padding-inline: 1.25rem;
+  @media (width >= 640px) { padding-inline: 2rem; }
+  @media (width >= 1024px) { padding-inline: 2.5rem; }
+}
+
+/* Section vertical rhythm */
+@utility section-gn {
+  padding-block: 4rem;
+  @media (width >= 768px) { padding-block: 6rem; }
+}
+
+/* Decorative dotted texture */
+@utility bg-dots {
+  background-image: radial-gradient(rgb(15 15 15 / 0.08) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+/* Hide scrollbar but keep scroll */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar { display: none; }
+}
+
+/* ---------- Fine details ---------- */
+
+.gn-divider {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--color-gold-600);
+}
+.gn-divider::before,
+.gn-divider::after {
+  content: "";
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(to right, transparent, var(--color-gold-500), transparent);
+  opacity: 0.5;
+}

@@ -1,0 +1,694 @@
+// ============================================================
+// GLAMNEST — PostgreSQL schema (Prisma ORM)
+// Marketplace: customers ↔ beauticians ↔ bookings
+// ============================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------- ENUMS ----------
+
+enum Role {
+  CUSTOMER
+  BEAUTICIAN
+  ADMIN
+  SUPPORT
+}
+
+enum BookingStatus {
+  PENDING_PAYMENT
+  CONFIRMED
+  BEAUTICIAN_ASSIGNED
+  EN_ROUTE
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED_BY_CUSTOMER
+  CANCELLED_BY_ADMIN
+  NO_SHOW
+  REFUNDED
+}
+
+enum PaymentStatus {
+  PENDING
+  AUTHORIZED
+  CAPTURED
+  FAILED
+  REFUND_INITIATED
+  REFUNDED
+}
+
+enum PaymentMethod {
+  RAZORPAY
+  STRIPE
+  WALLET
+  PAY_AFTER_SERVICE
+}
+
+enum KycStatus {
+  PENDING
+  DOCUMENTS_SUBMITTED
+  UNDER_REVIEW
+  VERIFIED
+  REJECTED
+}
+
+enum BeauticianStatus {
+  APPLIED
+  ONBOARDING
+  ACTIVE
+  SUSPENDED
+  DEACTIVATED
+}
+
+enum TransactionType {
+  CREDIT
+  DEBIT
+}
+
+enum TransactionSource {
+  BOOKING_PAYMENT
+  BOOKING_REFUND
+  REFERRAL_BONUS
+  CASHBACK
+  GIFT_CARD
+  PAYOUT
+  ADJUSTMENT
+  MEMBERSHIP_CREDIT
+}
+
+enum MembershipStatus {
+  ACTIVE
+  PAUSED
+  CANCELLED
+  EXPIRED
+}
+
+enum NotificationChannel {
+  WHATSAPP
+  SMS
+  EMAIL
+  PUSH
+  IN_APP
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  WAITING_ON_CUSTOMER
+  RESOLVED
+  CLOSED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum SettlementStatus {
+  PENDING
+  PROCESSING
+  PAID
+  FAILED
+}
+
+// ---------- IDENTITY ----------
+
+model User {
+  id            String    @id @default(cuid())
+  phone         String    @unique
+  email         String?   @unique
+  name          String?
+  avatarUrl     String?
+  role          Role      @default(CUSTOMER)
+  phoneVerified DateTime?
+  emailVerified DateTime?
+  dateOfBirth   DateTime?
+  gender        String?
+  referralCode  String    @unique @default(cuid())
+  referredById  String?
+  referredBy    User?     @relation("Referrals", fields: [referredById], references: [id])
+  referrals     User[]    @relation("Referrals")
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  addresses      Address[]
+  bookings       Booking[]
+  wallet         Wallet?
+  memberships    Membership[]
+  reviews        Review[]
+  notifications  Notification[]
+  supportTickets SupportTicket[]
+  beautician     Beautician?
+  couponUsages   CouponUsage[]
+  giftCardsSent  GiftCard[]      @relation("GiftCardBuyer")
+  giftCardsRecvd GiftCard[]      @relation("GiftCardRecipient")
+  otpCodes       OtpCode[]
+
+  @@index([phone])
+  @@index([referredById])
+}
+
+model OtpCode {
+  id        String   @id @default(cuid())
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  phone     String
+  codeHash  String
+  purpose   String   @default("LOGIN") // LOGIN | BOOKING_VERIFY | PAYOUT
+  expiresAt DateTime
+  consumed  Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([phone, purpose])
+}
+
+model Address {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  label     String // Home | Work | Other
+  line1     String
+  line2     String?
+  locality  String
+  cityId    String
+  city      City     @relation(fields: [cityId], references: [id])
+  pincode   String
+  latitude  Float?
+  longitude Float?
+  isDefault Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  bookings Booking[]
+
+  @@index([userId])
+}
+
+// ---------- GEOGRAPHY ----------
+
+model City {
+  id        String  @id @default(cuid())
+  name      String
+  slug      String  @unique
+  state     String
+  isLive    Boolean @default(false)
+  latitude  Float
+  longitude Float
+
+  serviceAreas ServiceArea[]
+  addresses    Address[]
+  beauticians  Beautician[]
+  cityPricing  CityServicePricing[]
+}
+
+model ServiceArea {
+  id      String  @id @default(cuid())
+  cityId  String
+  city    City    @relation(fields: [cityId], references: [id])
+  name    String // locality, e.g. "Boring Road"
+  pincode String?
+  isLive  Boolean @default(true)
+
+  beauticianAreas BeauticianServiceArea[]
+
+  @@unique([cityId, name])
+}
+
+// ---------- CATALOG ----------
+
+model Category {
+  id          String  @id @default(cuid())
+  slug        String  @unique
+  name        String
+  description String
+  icon        String?
+  imageUrl    String?
+  sortOrder   Int     @default(0)
+  isActive    Boolean @default(true)
+
+  services Service[]
+}
+
+model Service {
+  id               String   @id @default(cuid())
+  slug             String
+  categoryId       String
+  category         Category @relation(fields: [categoryId], references: [id])
+  name             String
+  shortDescription String
+  description      String
+  basePrice        Int // paise-free INR
+  durationMin      Int
+  imageUrl         String?
+  isActive         Boolean  @default(true)
+  isPopular        Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  packages     ServicePackage[]
+  addOns       ServiceAddOn[]
+  bookingItems BookingItem[]
+  reviews      Review[]
+  cityPricing  CityServicePricing[]
+  skills       BeauticianSkill[]
+
+  @@unique([categoryId, slug])
+  @@index([categoryId])
+}
+
+model ServicePackage {
+  id          String  @id @default(cuid())
+  serviceId   String
+  service     Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  name        String
+  tier        String // essential | premium | luxe
+  price       Int
+  strikePrice Int?
+  durationMin Int
+  includes    String[] // list of bullet points
+  isPopular   Boolean @default(false)
+  isActive    Boolean @default(true)
+
+  bookingItems BookingItem[]
+}
+
+model ServiceAddOn {
+  id          String  @id @default(cuid())
+  serviceId   String
+  service     Service @relation(fields: [serviceId], references: [id], onDelete: Cascade)
+  name        String
+  price       Int
+  durationMin Int
+  isActive    Boolean @default(true)
+
+  bookingAddOns BookingAddOn[]
+}
+
+/// Dynamic per-city price overrides (territory pricing)
+model CityServicePricing {
+  id            String  @id @default(cuid())
+  cityId        String
+  city          City    @relation(fields: [cityId], references: [id])
+  serviceId     String
+  service       Service @relation(fields: [serviceId], references: [id])
+  priceMultiplier Float @default(1.0)
+  surgeActive   Boolean @default(false)
+
+  @@unique([cityId, serviceId])
+}
+
+// ---------- BEAUTICIAN (PARTNER) ----------
+
+model Beautician {
+  id             String           @id @default(cuid())
+  userId         String           @unique
+  user           User             @relation(fields: [userId], references: [id])
+  cityId         String
+  city           City             @relation(fields: [cityId], references: [id])
+  status         BeauticianStatus @default(APPLIED)
+  kycStatus      KycStatus        @default(PENDING)
+  experienceYears Int             @default(0)
+  bio            String?
+  rating         Float            @default(0)
+  totalJobs      Int              @default(0)
+  commissionPct  Float            @default(20) // platform commission %
+  isOnline       Boolean          @default(false)
+  lastLatitude   Float?
+  lastLongitude  Float?
+  lastSeenAt     DateTime?
+  joinedAt       DateTime         @default(now())
+
+  documents    BeauticianDocument[]
+  skills       BeauticianSkill[]
+  serviceAreas BeauticianServiceArea[]
+  availability AvailabilitySlot[]
+  bookings     Booking[]
+  reviews      Review[]
+  payouts      Payout[]
+  attendance   AttendanceRecord[]
+
+  @@index([cityId, status])
+}
+
+model BeauticianDocument {
+  id           String     @id @default(cuid())
+  beauticianId String
+  beautician   Beautician @relation(fields: [beauticianId], references: [id], onDelete: Cascade)
+  type         String // AADHAAR | PAN | POLICE_VERIFICATION | CERTIFICATE | BANK_PROOF
+  fileUrl      String
+  verified     Boolean    @default(false)
+  verifiedAt   DateTime?
+  uploadedAt   DateTime   @default(now())
+
+  @@index([beauticianId])
+}
+
+model BeauticianSkill {
+  id           String     @id @default(cuid())
+  beauticianId String
+  beautician   Beautician @relation(fields: [beauticianId], references: [id], onDelete: Cascade)
+  serviceId    String
+  service      Service    @relation(fields: [serviceId], references: [id])
+  certified    Boolean    @default(false)
+
+  @@unique([beauticianId, serviceId])
+}
+
+model BeauticianServiceArea {
+  id            String      @id @default(cuid())
+  beauticianId  String
+  beautician    Beautician  @relation(fields: [beauticianId], references: [id], onDelete: Cascade)
+  serviceAreaId String
+  serviceArea   ServiceArea @relation(fields: [serviceAreaId], references: [id])
+
+  @@unique([beauticianId, serviceAreaId])
+}
+
+model AvailabilitySlot {
+  id           String     @id @default(cuid())
+  beauticianId String
+  beautician   Beautician @relation(fields: [beauticianId], references: [id], onDelete: Cascade)
+  dayOfWeek    Int // 0=Sun … 6=Sat
+  startMinutes Int // minutes from midnight
+  endMinutes   Int
+  isActive     Boolean    @default(true)
+
+  @@index([beauticianId, dayOfWeek])
+}
+
+model AttendanceRecord {
+  id           String     @id @default(cuid())
+  beauticianId String
+  beautician   Beautician @relation(fields: [beauticianId], references: [id], onDelete: Cascade)
+  date         DateTime   @db.Date
+  checkInAt    DateTime?
+  checkOutAt   DateTime?
+  onlineMinutes Int       @default(0)
+
+  @@unique([beauticianId, date])
+}
+
+// ---------- BOOKINGS ----------
+
+model Booking {
+  id            String        @id @default(cuid())
+  code          String        @unique // GN2026xxxxxx — customer-facing
+  userId        String
+  user          User          @relation(fields: [userId], references: [id])
+  beauticianId  String?
+  beautician    Beautician?   @relation(fields: [beauticianId], references: [id])
+  addressId     String
+  address       Address       @relation(fields: [addressId], references: [id])
+  status        BookingStatus @default(PENDING_PAYMENT)
+  scheduledDate DateTime      @db.Date
+  scheduledSlot String // "10:00"
+  subtotal      Int
+  visitFee      Int           @default(0)
+  discount      Int           @default(0)
+  total         Int
+  couponId      String?
+  coupon        Coupon?       @relation(fields: [couponId], references: [id])
+  notes         String?
+  cancelReason  String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+
+  items        BookingItem[]
+  addOns       BookingAddOn[]
+  payment      Payment?
+  review       Review?
+  statusEvents BookingStatusEvent[]
+
+  @@index([userId])
+  @@index([beauticianId, scheduledDate])
+  @@index([status, scheduledDate])
+}
+
+model BookingItem {
+  id               String          @id @default(cuid())
+  bookingId        String
+  booking          Booking         @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  serviceId        String
+  service          Service         @relation(fields: [serviceId], references: [id])
+  servicePackageId String?
+  servicePackage   ServicePackage? @relation(fields: [servicePackageId], references: [id])
+  unitPrice        Int
+  quantity         Int             @default(1)
+
+  @@index([bookingId])
+}
+
+model BookingAddOn {
+  id             String       @id @default(cuid())
+  bookingId      String
+  booking        Booking      @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  serviceAddOnId String
+  serviceAddOn   ServiceAddOn @relation(fields: [serviceAddOnId], references: [id])
+  unitPrice      Int
+
+  @@index([bookingId])
+}
+
+/// Audit trail: every state transition, for ops + dispute resolution
+model BookingStatusEvent {
+  id        String        @id @default(cuid())
+  bookingId String
+  booking   Booking       @relation(fields: [bookingId], references: [id], onDelete: Cascade)
+  status    BookingStatus
+  note      String?
+  actorId   String? // user/admin who triggered it
+  createdAt DateTime      @default(now())
+
+  @@index([bookingId, createdAt])
+}
+
+// ---------- PAYMENTS & MONEY ----------
+
+model Payment {
+  id                String        @id @default(cuid())
+  bookingId         String        @unique
+  booking           Booking       @relation(fields: [bookingId], references: [id])
+  method            PaymentMethod
+  status            PaymentStatus @default(PENDING)
+  amount            Int
+  currency          String        @default("INR")
+  razorpayOrderId   String?       @unique
+  razorpayPaymentId String?       @unique
+  stripeIntentId    String?       @unique
+  refundAmount      Int           @default(0)
+  capturedAt        DateTime?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+}
+
+model Wallet {
+  id        String   @id @default(cuid())
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id])
+  balance   Int      @default(0) // INR
+  updatedAt DateTime @updatedAt
+
+  transactions WalletTransaction[]
+}
+
+model WalletTransaction {
+  id        String            @id @default(cuid())
+  walletId  String
+  wallet    Wallet            @relation(fields: [walletId], references: [id])
+  type      TransactionType
+  source    TransactionSource
+  amount    Int
+  balanceAfter Int
+  reference String? // bookingId / payoutId / giftCardId
+  note      String?
+  createdAt DateTime          @default(now())
+
+  @@index([walletId, createdAt])
+}
+
+model Payout {
+  id           String           @id @default(cuid())
+  beauticianId String
+  beautician   Beautician       @relation(fields: [beauticianId], references: [id])
+  periodStart  DateTime         @db.Date
+  periodEnd    DateTime         @db.Date
+  grossAmount  Int
+  commission   Int
+  incentives   Int              @default(0)
+  netAmount    Int
+  status       SettlementStatus @default(PENDING)
+  utrNumber    String?
+  paidAt       DateTime?
+  createdAt    DateTime         @default(now())
+
+  @@index([beauticianId, periodStart])
+}
+
+// ---------- GROWTH: COUPONS, REFERRALS, MEMBERSHIPS, GIFT CARDS ----------
+
+model Coupon {
+  id             String    @id @default(cuid())
+  code           String    @unique
+  description    String
+  discountType   String // FLAT | PERCENT
+  discountValue  Int
+  maxDiscount    Int?
+  minOrderValue  Int       @default(0)
+  usageLimit     Int? // total redemptions allowed
+  perUserLimit   Int       @default(1)
+  firstOrderOnly Boolean   @default(false)
+  validFrom      DateTime  @default(now())
+  validUntil     DateTime?
+  isActive       Boolean   @default(true)
+
+  usages   CouponUsage[]
+  bookings Booking[]
+}
+
+model CouponUsage {
+  id        String   @id @default(cuid())
+  couponId  String
+  coupon    Coupon   @relation(fields: [couponId], references: [id])
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  bookingId String?
+  usedAt    DateTime @default(now())
+
+  @@index([couponId, userId])
+}
+
+model MembershipPlan {
+  id             String  @id @default(cuid())
+  slug           String  @unique
+  name           String
+  pricePerMonth  Int
+  priceAnnual    Int
+  discountPct    Float
+  perks          String[]
+  freeServiceSlug String?
+  isActive       Boolean @default(true)
+
+  memberships Membership[]
+}
+
+model Membership {
+  id        String           @id @default(cuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id])
+  planId    String
+  plan      MembershipPlan   @relation(fields: [planId], references: [id])
+  status    MembershipStatus @default(ACTIVE)
+  startedAt DateTime         @default(now())
+  renewsAt  DateTime
+  endedAt   DateTime?
+
+  @@index([userId, status])
+}
+
+model GiftCard {
+  id          String    @id @default(cuid())
+  code        String    @unique
+  amount      Int
+  balance     Int
+  buyerId     String
+  buyer       User      @relation("GiftCardBuyer", fields: [buyerId], references: [id])
+  recipientId String?
+  recipient   User?     @relation("GiftCardRecipient", fields: [recipientId], references: [id])
+  recipientPhone String?
+  message     String?
+  expiresAt   DateTime
+  redeemedAt  DateTime?
+  createdAt   DateTime  @default(now())
+}
+
+// ---------- REVIEWS ----------
+
+model Review {
+  id           String      @id @default(cuid())
+  bookingId    String      @unique
+  booking      Booking     @relation(fields: [bookingId], references: [id])
+  userId       String
+  user         User        @relation(fields: [userId], references: [id])
+  beauticianId String?
+  beautician   Beautician? @relation(fields: [beauticianId], references: [id])
+  serviceId    String?
+  service      Service?    @relation(fields: [serviceId], references: [id])
+  rating       Int // 1..5
+  hygieneRating Int? // 1..5
+  comment      String?
+  isPublished  Boolean     @default(false)
+  adminReply   String?
+  createdAt    DateTime    @default(now())
+
+  @@index([beauticianId, isPublished])
+  @@index([serviceId, isPublished])
+}
+
+// ---------- COMMS & SUPPORT ----------
+
+model Notification {
+  id        String              @id @default(cuid())
+  userId    String
+  user      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  channel   NotificationChannel
+  title     String
+  body      String
+  data      Json?
+  sentAt    DateTime?
+  readAt    DateTime?
+  createdAt DateTime            @default(now())
+
+  @@index([userId, readAt])
+}
+
+model SupportTicket {
+  id         String         @id @default(cuid())
+  userId     String
+  user       User           @relation(fields: [userId], references: [id])
+  bookingId  String?
+  subject    String
+  status     TicketStatus   @default(OPEN)
+  priority   TicketPriority @default(MEDIUM)
+  assignedTo String? // admin userId
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  messages TicketMessage[]
+
+  @@index([status, priority])
+}
+
+model TicketMessage {
+  id        String        @id @default(cuid())
+  ticketId  String
+  ticket    SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  senderId  String
+  body      String
+  createdAt DateTime      @default(now())
+
+  @@index([ticketId, createdAt])
+}
+
+// ---------- CONTENT ----------
+
+model BlogPost {
+  id          String    @id @default(cuid())
+  slug        String    @unique
+  title       String
+  excerpt     String
+  content     String // markdown/rich text
+  category    String
+  authorName  String
+  coverUrl    String?
+  publishedAt DateTime?
+  isPublished Boolean   @default(false)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
