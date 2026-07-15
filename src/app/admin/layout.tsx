@@ -51,6 +51,7 @@ const NAV: PortalNavGroup[] = [
   {
     label: "Content & Ops",
     items: [
+      { label: "Makeup Gallery", href: "/admin/gallery", icon: "ImagePlus" },
       { label: "Blogs", href: "/admin/blogs", icon: "Newspaper" },
       { label: "Notifications", href: "/admin/notifications", icon: "Bell" },
       { label: "Support", href: "/admin/support", icon: "LifeBuoy" },

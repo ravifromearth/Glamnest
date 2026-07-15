@@ -12,6 +12,8 @@ export const BRAND = {
   phone: "+91 8002708000",
   whatsapp: "+918002708000",
   email: "care@glamnest.in",
+  legalName: "Bytebaba LLP",
+  paymentUrl: "https://bytebaba.com/payment",
   address: {
     line1: "Satyam Technology Bhawan",
     line2: "Digha",
@@ -51,10 +53,10 @@ export interface City {
 
 export const CITIES: City[] = [
   { name: "Patna", state: "Bihar", slug: "patna", status: "live", latitude: 25.5941, longitude: 85.1376 },
+  { name: "Bangalore", state: "Karnataka", slug: "bangalore", status: "live", latitude: 12.9716, longitude: 77.5946 },
   { name: "Muzaffarpur", state: "Bihar", slug: "muzaffarpur", status: "coming-soon", latitude: 26.1225, longitude: 85.3906 },
-  { name: "Gaya", state: "Bihar", slug: "gaya", status: "coming-soon", latitude: 24.7914, longitude: 85.0002 },
+  { name: "Jamui", state: "Bihar", slug: "jamui", status: "coming-soon", latitude: 24.7914, longitude: 85.0002 },
   { name: "Bhagalpur", state: "Bihar", slug: "bhagalpur", status: "coming-soon", latitude: 25.2425, longitude: 86.9842 },
-  { name: "Darbhanga", state: "Bihar", slug: "darbhanga", status: "coming-soon", latitude: 26.1542, longitude: 85.8918 },
   { name: "Ranchi", state: "Jharkhand", slug: "ranchi", status: "coming-soon", latitude: 23.3441, longitude: 85.3096 },
   { name: "Varanasi", state: "Uttar Pradesh", slug: "varanasi", status: "coming-soon", latitude: 25.3176, longitude: 82.9739 },
   { name: "Lucknow", state: "Uttar Pradesh", slug: "lucknow", status: "coming-soon", latitude: 26.8467, longitude: 80.9462 },

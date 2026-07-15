@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Facebook, Instagram, Mail, MapPin, Phone, Twitter, Youtube } from "lucide-react";
 import { Logo } from "./logo";
-import { BRAND, CITIES } from "@/lib/brand";
+import { WhatsAppIcon } from "./whatsapp-button";
+import { BRAND, CITIES, whatsappHref } from "@/lib/brand";
 import { CATEGORIES } from "@/lib/catalog";
 
 const COMPANY_LINKS = [
@@ -51,6 +52,15 @@ export function Footer() {
             </p>
           </div>
           <div className="mt-6 flex gap-3">
+            <a
+              href={whatsappHref()}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="WhatsApp"
+              className="flex size-9 items-center justify-center rounded-full border border-white/10 text-[#25D366] transition-all hover:border-[#25D366] hover:text-[#25D366]"
+            >
+              <WhatsAppIcon className="size-4" />
+            </a>
             {[
               { icon: Instagram, href: BRAND.social.instagram, label: "Instagram" },
               { icon: Facebook, href: BRAND.social.facebook, label: "Facebook" },
@@ -137,7 +147,7 @@ export function Footer() {
       {/* Bottom */}
       <div className="border-t border-white/8">
         <div className="container-gn flex flex-col items-center justify-between gap-3 py-6 text-xs text-cream-100/45 sm:flex-row">
-          <p>© {new Date().getFullYear()} {BRAND.name} Technologies Pvt. Ltd. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} {BRAND.legalName}. All rights reserved.</p>
           <div className="flex items-center gap-5">
             {LEGAL_LINKS.map((l) => (
               <Link key={l.href} href={l.href} className="transition-colors hover:text-gold-400">

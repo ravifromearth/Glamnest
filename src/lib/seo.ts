@@ -148,7 +148,7 @@ export const SEO_LANDING_PAGES = [
   { intent: "spa-at-home", label: "Spa at Home", serviceHint: "spa-wellness" },
 ] as const;
 
-export const SEO_CITY_SLUGS = ["patna", "muzaffarpur", "gaya", "bhagalpur", "darbhanga"] as const;
+export const SEO_CITY_SLUGS = ["patna", "bangalore", "muzaffarpur", "gaya", "bhagalpur"] as const;
 
 export function allSeoLandingSlugs() {
   const slugs: string[] = [];

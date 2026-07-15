@@ -1,13 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { Banknote, Check, CreditCard, Loader2, MessageCircle, Sparkles } from "lucide-react";
+import { Banknote, Check, CreditCard, Loader2, Sparkles } from "lucide-react";
 import { useBookingStore, useBookingTotals } from "@/stores/booking-store";
 import { createBooking } from "@/server/actions";
-import { whatsappHref } from "@/lib/brand";
+import { BRAND, whatsappHref } from "@/lib/brand";
 import { cn, formatINR } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { WhatsAppIcon } from "@/components/site/whatsapp-button";
 import { StepHeader } from "./step-header";
 
 function formatBookingDate(iso: string) {
@@ -43,7 +44,7 @@ function buildWhatsAppBookingMessage(params: {
   const addOnLine =
     params.addOns.length > 0 ? params.addOns.join(", ") : "None";
   const paymentLabel =
-    params.paymentMethod === "razorpay" ? "Pay Online (Razorpay)" : "Pay After Service";
+    params.paymentMethod === "razorpay" ? "Pay Online" : "Pay After Service";
 
   return [
     `Hi GlamNest! I'd like to confirm this booking:`,
@@ -112,8 +113,14 @@ export function StepPayment() {
           paymentMethod,
           total,
         });
+        const waUrl = whatsappHref(message);
         store.reset();
-        window.location.href = whatsappHref(message);
+        if (paymentMethod === "razorpay") {
+          window.open(waUrl, "_blank", "noopener,noreferrer");
+          window.location.href = BRAND.paymentUrl;
+          return;
+        }
+        window.location.href = waUrl;
         return;
       }
       setError(result.error);
@@ -166,14 +173,14 @@ export function StepPayment() {
             </span>
           </span>
           <span className="mt-4 font-display text-lg font-semibold text-ink-950">
-            Pay Online (Razorpay)
+            Pay Online
           </span>
           <span className="mt-1 text-sm text-ink-500">
             UPI, credit & debit cards, netbanking and wallets — 100% secure.
           </span>
           <span className="mt-3 inline-flex items-center gap-1.5 text-xs font-medium text-emerald-700">
             <Sparkles className="size-3.5" />
-            Get up to ₹75 cashback on UPI payments
+            Instant secure checkout
           </span>
         </button>
 
@@ -233,11 +240,16 @@ export function StepPayment() {
           {submitting ? (
             <>
               <Loader2 className="animate-spin" />
-              Opening WhatsApp…
+              {paymentMethod === "razorpay" ? "Redirecting to payment…" : "Opening WhatsApp…"}
+            </>
+          ) : paymentMethod === "razorpay" ? (
+            <>
+              <CreditCard />
+              Pay Now
             </>
           ) : (
             <>
-              <MessageCircle />
+              <WhatsAppIcon className="size-4" />
               Confirm on WhatsApp
             </>
           )}
@@ -245,7 +257,9 @@ export function StepPayment() {
       </div>
 
       <p className="mt-4 text-center text-xs text-ink-400">
-        Your booking details will open in WhatsApp so you can share them with our team.
+        {paymentMethod === "razorpay"
+          ? "You’ll be redirected to our secure payment page to complete your booking."
+          : "Your booking details will open in WhatsApp so you can share them with our team."}{" "}
         Free rescheduling up to 4 hours before your slot.
       </p>
     </section>

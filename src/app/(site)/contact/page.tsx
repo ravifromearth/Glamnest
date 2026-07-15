@@ -1,5 +1,6 @@
-import { Clock, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
+import { Clock, Mail, MapPin, Phone } from "lucide-react";
 import { SectionHeading } from "@/components/site/section-heading";
+import { WhatsAppIcon } from "@/components/site/whatsapp-button";
 import { BRAND } from "@/lib/brand";
 import { buildMetadata } from "@/lib/seo";
 import { ContactForm } from "./contact-form";
@@ -21,7 +22,7 @@ const CHANNELS = [
     cta: "Call now",
   },
   {
-    icon: MessageCircle,
+    icon: WhatsAppIcon,
     title: "WhatsApp",
     value: BRAND.phone,
     detail: "Fastest replies — share screenshots, get slot links.",
