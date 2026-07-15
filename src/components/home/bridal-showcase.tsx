@@ -1,7 +1,8 @@
 import Link from "next/link";
+import Image from "next/image";
 import { ArrowRight, Check, Crown } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { getServicesByCategory } from "@/lib/catalog";
 import { formatINR } from "@/lib/utils";
 
@@ -12,25 +13,29 @@ export function BridalShowcase() {
     <section className="section-gn overflow-hidden bg-gradient-to-b from-cream-100 to-cream-50">
       <div className="container-gn grid items-center gap-12 lg:grid-cols-2">
         {/* Visual */}
-        <div className="relative order-2 lg:order-1" aria-hidden>
-          <div className="relative mx-auto aspect-square max-w-md overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-rose-200 via-blush-100 to-cream-100 shadow-lift">
-            <div className="absolute inset-0 bg-dots opacity-30" />
-            <div className="absolute inset-0 flex items-center justify-center">
-              <span className="text-[9rem] drop-shadow-md">👰</span>
-            </div>
+        <div className="relative order-2 lg:order-1">
+          <div className="relative mx-auto aspect-[4/5] max-w-md overflow-hidden rounded-[2.5rem] bg-cream-100 shadow-lift">
+            <Image
+              src="/gallery/priyanka/work-02.jpg"
+              alt="Bridal makeup by Priyanka Singh — traditional red lehenga look"
+              fill
+              sizes="(max-width: 1024px) 100vw, 28rem"
+              className="object-cover object-top"
+              priority
+            />
             <div className="glass absolute bottom-6 left-6 right-6 rounded-3xl p-4">
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-3">
                 <div>
-                  <p className="font-display text-base font-semibold text-ink-950">Celebrity Luxe Bridal</p>
-                  <p className="text-xs text-ink-500">Trial included · 4-hr touch-up support</p>
+                  <p className="font-display text-base font-semibold text-ink-950">Priyanka Singh</p>
+                  <p className="text-xs text-ink-500">Bridal & Makeup Specialist</p>
                 </div>
                 <p className="font-display text-lg font-bold text-gold-700">{formatINR(18999)}</p>
               </div>
             </div>
           </div>
           <div className="absolute -right-2 top-8 hidden rotate-6 rounded-2xl bg-ink-950 px-5 py-3 text-cream-50 shadow-lift sm:block">
-            <p className="font-display text-sm font-semibold text-gold-400">400+ brides</p>
-            <p className="text-[11px] text-cream-100/60">glammed this season</p>
+            <p className="font-display text-sm font-semibold text-gold-400">Real bridal work</p>
+            <p className="text-[11px] text-cream-100/60">from our Patna studio</p>
           </div>
         </div>
 

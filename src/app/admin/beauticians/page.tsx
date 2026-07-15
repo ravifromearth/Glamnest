@@ -28,9 +28,9 @@ interface Beautician {
 }
 
 const BEAUTICIANS: Beautician[] = [
-  { name: "Sunita Devi", initials: "SD", specialty: "Bridal & Makeup", city: "Patna", rating: 4.9, jobs: 322, kyc: "VERIFIED", status: "ACTIVE", commission: 20 },
-  { name: "Farhan Ali", initials: "FA", specialty: "Hair", city: "Patna", rating: 4.8, jobs: 415, kyc: "VERIFIED", status: "ACTIVE", commission: 20 },
-  { name: "Pooja Sharma", initials: "PS", specialty: "Skin & Facial", city: "Patna", rating: 4.9, jobs: 289, kyc: "VERIFIED", status: "ACTIVE", commission: 18 },
+  { name: "Priyanka Singh", initials: "PS", specialty: "Bridal & Makeup Specialist", city: "Patna", rating: 4.9, jobs: 322, kyc: "VERIFIED", status: "ACTIVE", commission: 20 },
+  { name: "Babli Singh", initials: "BS", specialty: "Senior Makeup Artist", city: "Patna", rating: 4.8, jobs: 415, kyc: "VERIFIED", status: "ACTIVE", commission: 20 },
+  { name: "Sadhna Singh", initials: "SS", specialty: "Makeup Artist", city: "Patna", rating: 4.8, jobs: 289, kyc: "VERIFIED", status: "ACTIVE", commission: 18 },
   { name: "Nazia Parveen", initials: "NP", specialty: "Waxing", city: "Patna", rating: 4.7, jobs: 356, kyc: "VERIFIED", status: "ACTIVE", commission: 20 },
   { name: "Rekha Kumari", initials: "RK", specialty: "Spa & Wellness", city: "Patna", rating: 4.8, jobs: 244, kyc: "VERIFIED", status: "ACTIVE", commission: 20 },
   { name: "Shabnam Ara", initials: "SA", specialty: "Mehendi", city: "Patna", rating: 4.9, jobs: 118, kyc: "VERIFIED", status: "ACTIVE", commission: 15 },

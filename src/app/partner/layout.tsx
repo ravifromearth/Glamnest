@@ -35,7 +35,7 @@ export default function PartnerLayout({ children }: { children: React.ReactNode 
       subtitle="Partner Portal"
       nav={NAV}
       rootHref="/partner"
-      user={{ name: "Sunita Devi", initials: "SD", role: "Bridal & Makeup Specialist" }}
+      user={{ name: "Priyanka Singh", initials: "PS", role: "Bridal & Makeup Specialist" }}
       topbarExtra={<OnlineToggle />}
     >
       {children}

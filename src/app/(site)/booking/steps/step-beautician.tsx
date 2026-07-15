@@ -18,9 +18,9 @@ export const AUTO_ASSIGN: BeauticianOption = {
 };
 
 const BEAUTICIANS: BeauticianOption[] = [
-  { id: "bt-sunita", name: "Sunita Devi", rating: 4.9, jobs: 1240, specialty: "Bridal & Makeup Specialist", initials: "SD" },
-  { id: "bt-farhan", name: "Farhan Ali", rating: 4.8, jobs: 980, specialty: "Senior Hairstylist", initials: "FA" },
-  { id: "bt-pooja", name: "Pooja Kumari", rating: 4.9, jobs: 1520, specialty: "Skin & Spa Expert", initials: "PK" },
+  { id: "bt-priyanka", name: "Priyanka Singh", rating: 4.9, jobs: 1240, specialty: "Bridal & Makeup Specialist", initials: "PS" },
+  { id: "bt-babli", name: "Babli Singh", rating: 4.8, jobs: 980, specialty: "Senior Makeup Artist", initials: "BS" },
+  { id: "bt-sadhna", name: "Sadhna Singh", rating: 4.8, jobs: 720, specialty: "Makeup Artist", initials: "SS" },
 ];
 
 export function StepBeautician() {

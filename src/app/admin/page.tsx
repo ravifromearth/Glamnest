@@ -87,9 +87,9 @@ interface TopBeautician {
 }
 
 const TOP_BEAUTICIANS: TopBeautician[] = [
-  { name: "Sunita Devi", initials: "SD", specialty: "Bridal & Makeup", jobs: 96, rating: 4.9, revenue: 284000 },
-  { name: "Farhan Ali", initials: "FA", specialty: "Hair", jobs: 88, rating: 4.8, revenue: 176500 },
-  { name: "Pooja Sharma", initials: "PS", specialty: "Skin & Facial", jobs: 82, rating: 4.9, revenue: 142300 },
+  { name: "Priyanka Singh", initials: "PS", specialty: "Bridal & Makeup Specialist", jobs: 96, rating: 4.9, revenue: 284000 },
+  { name: "Babli Singh", initials: "BS", specialty: "Senior Makeup Artist", jobs: 88, rating: 4.8, revenue: 176500 },
+  { name: "Sadhna Singh", initials: "SS", specialty: "Makeup Artist", jobs: 82, rating: 4.8, revenue: 142300 },
   { name: "Nazia Parveen", initials: "NP", specialty: "Waxing", jobs: 79, rating: 4.7, revenue: 118400 },
   { name: "Rekha Kumari", initials: "RK", specialty: "Spa & Wellness", jobs: 71, rating: 4.8, revenue: 131900 },
 ];

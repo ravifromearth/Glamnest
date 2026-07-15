@@ -70,6 +70,52 @@ export const BEFORE_AFTER = [
   { service: "Bridal Mehendi", locality: "Rajendra Nagar, Patna", emoji: "🌺", beforeShade: "from-stone-200 to-stone-100", afterShade: "from-lime-100 to-orange-100" },
 ];
 
+/** Real portfolio shots — Priyanka Singh bridal & makeup work. */
+export const WORK_GALLERY = [
+  {
+    src: "/gallery/priyanka/work-01.jpg",
+    alt: "Traditional red bridal makeup with maang tikka and braid styling",
+    title: "Classic Bridal Glow",
+    artist: "Priyanka Singh",
+    category: "Bridal Makeup",
+  },
+  {
+    src: "/gallery/priyanka/work-02.jpg",
+    alt: "Bridal makeup look with ornate gold jewelry and red lehenga",
+    title: "Red Lehenga Bridal",
+    artist: "Priyanka Singh",
+    category: "Bridal Makeup",
+  },
+  {
+    src: "/gallery/priyanka/work-03.jpg",
+    alt: "Party makeup with smokey eyes and elegant updo",
+    title: "Evening Party Glam",
+    artist: "Priyanka Singh",
+    category: "Party Makeup",
+  },
+  {
+    src: "/gallery/priyanka/work-04.jpg",
+    alt: "Soft glam makeup and styling for a celebration look",
+    title: "Soft Celebration Look",
+    artist: "Priyanka Singh",
+    category: "Party Makeup",
+  },
+  {
+    src: "/gallery/priyanka/work-05.jpg",
+    alt: "Bridal and makeup artistry portfolio sample",
+    title: "Bridal Finish",
+    artist: "Priyanka Singh",
+    category: "Bridal Makeup",
+  },
+  {
+    src: "/gallery/priyanka/work-06.jpg",
+    alt: "Makeup artist portfolio look by Priyanka Singh",
+    title: "Signature Glam",
+    artist: "Priyanka Singh",
+    category: "Makeup",
+  },
+] as const;
+
 export const STATS = [
   { value: "25,000+", label: "Services Delivered" },
   { value: "4.8★", label: "Average Rating" },
@@ -125,7 +171,7 @@ export const BLOG_POSTS: BlogPost[] = [
     excerpt:
       "Rica costs more per session — but is it hype or genuinely better for your skin? A beautician's honest breakdown.",
     category: "Skin",
-    author: "Sunita Devi",
+    author: "Priyanka Singh",
     authorRole: "Senior Beautician, Patna",
     publishedAt: "2026-06-02",
     readMinutes: 4,
@@ -159,7 +205,7 @@ export const BLOG_POSTS: BlogPost[] = [
     excerpt:
       "Frizz, flat roots and sudden hairfall — Patna's monsoon is brutal on hair. Our stylists share the routine that actually works.",
     category: "Hair",
-    author: "Farhan Ali",
+    author: "Babli Singh",
     authorRole: "Senior Hairstylist",
     publishedAt: "2026-07-05",
     readMinutes: 5,
@@ -261,7 +307,7 @@ export const BLOG_POSTS: BlogPost[] = [
         heading: "The partner model",
         paragraphs: [
           "Partners set their own availability, choose their service areas, and keep the majority of every booking. Training, kits and insurance come from us; the schedule stays theirs.",
-          "Sunita, one of our first Patna partners, now earns 2.3× her old salon salary working six hours a day — and picks her daughter up from school every afternoon. That's the marketplace we're building.",
+          "Priyanka, one of our first Patna partners, now earns 2.3× her old salon salary working six hours a day — and picks her daughter up from school every afternoon. That's the marketplace we're building.",
         ],
       },
     ],

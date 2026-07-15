@@ -22,16 +22,16 @@ interface Booking {
 }
 
 const BOOKINGS: Booking[] = [
-  { code: "GN202607421", customer: "Priya Kumari", service: "Party Makeup", beautician: "Sunita Devi", city: "Patna", slot: "14 Jul · 1:00 PM", amount: 2499, status: "IN PROGRESS" },
-  { code: "GN202607420", customer: "Anjali Sinha", service: "Glow Facial", beautician: "Sunita Devi", city: "Patna", slot: "14 Jul · 10:00 AM", amount: 1299, status: "COMPLETED" },
+  { code: "GN202607421", customer: "Priya Kumari", service: "Party Makeup", beautician: "Priyanka Singh", city: "Patna", slot: "14 Jul · 1:00 PM", amount: 2499, status: "IN PROGRESS" },
+  { code: "GN202607420", customer: "Anjali Sinha", service: "Glow Facial", beautician: "Babli Singh", city: "Patna", slot: "14 Jul · 10:00 AM", amount: 1299, status: "COMPLETED" },
   { code: "GN202607419", customer: "Megha Jain", service: "Full Body Waxing", beautician: "Nazia Parveen", city: "Patna", slot: "14 Jul · 3:00 PM", amount: 2299, status: "CONFIRMED" },
   { code: "GN202607418", customer: "Sadaf Khan", service: "Spa Mani-Pedi", beautician: "Rekha Kumari", city: "Patna", slot: "14 Jul · 4:30 PM", amount: 1499, status: "CONFIRMED" },
   { code: "GN202607417", customer: "Ritu Verma", service: "Aroma Body Spa", beautician: "Rekha Kumari", city: "Patna", slot: "14 Jul · 12:00 PM", amount: 2199, status: "IN PROGRESS" },
-  { code: "GN202607416", customer: "Kavya Singh", service: "Haircut & Styling", beautician: "Farhan Ali", city: "Patna", slot: "14 Jul · 11:00 AM", amount: 999, status: "COMPLETED" },
-  { code: "GN202607415", customer: "Pooja Mishra", service: "Cleanup & De-Tan", beautician: "Pooja Sharma", city: "Patna", slot: "14 Jul · 9:30 AM", amount: 1099, status: "COMPLETED" },
-  { code: "GN202607414", customer: "Neha Gupta", service: "24K Gold Facial", beautician: "Pooja Sharma", city: "Patna", slot: "15 Jul · 11:00 AM", amount: 2199, status: "CONFIRMED" },
-  { code: "GN202607413", customer: "Shreya Raj", service: "Engagement Makeup", beautician: "Sunita Devi", city: "Patna", slot: "17 Jul · 9:00 AM", amount: 6999, status: "CONFIRMED" },
-  { code: "GN202607412", customer: "Divya Prakash", service: "Hair Colour", beautician: "Farhan Ali", city: "Patna", slot: "13 Jul · 5:00 PM", amount: 2499, status: "CANCELLED" },
+  { code: "GN202607416", customer: "Kavya Singh", service: "Haircut & Styling", beautician: "Sadhna Singh", city: "Patna", slot: "14 Jul · 11:00 AM", amount: 999, status: "COMPLETED" },
+  { code: "GN202607415", customer: "Pooja Mishra", service: "Cleanup & De-Tan", beautician: "Sadhna Singh", city: "Patna", slot: "14 Jul · 9:30 AM", amount: 1099, status: "COMPLETED" },
+  { code: "GN202607414", customer: "Neha Gupta", service: "24K Gold Facial", beautician: "Babli Singh", city: "Patna", slot: "15 Jul · 11:00 AM", amount: 2199, status: "CONFIRMED" },
+  { code: "GN202607413", customer: "Shreya Raj", service: "Engagement Makeup", beautician: "Priyanka Singh", city: "Patna", slot: "17 Jul · 9:00 AM", amount: 6999, status: "CONFIRMED" },
+  { code: "GN202607412", customer: "Divya Prakash", service: "Hair Colour", beautician: "Babli Singh", city: "Patna", slot: "13 Jul · 5:00 PM", amount: 2499, status: "CANCELLED" },
 ];
 
 const STATUS_VARIANT: Record<BookingStatus, BadgeProps["variant"]> = {

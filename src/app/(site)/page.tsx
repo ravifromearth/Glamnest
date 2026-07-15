@@ -6,7 +6,7 @@ import { BridalShowcase } from "@/components/home/bridal-showcase";
 import { PackagesPreview } from "@/components/home/packages-preview";
 import { MembershipPreview } from "@/components/home/membership-preview";
 import { TestimonialsSection } from "@/components/home/testimonials-section";
-import { BeforeAfter } from "@/components/home/before-after";
+import { WorkGallery } from "@/components/home/work-gallery";
 import { AppDownload } from "@/components/home/app-download";
 import { BlogTeaser } from "@/components/home/blog-teaser";
 import { FAQS } from "@/lib/content";
@@ -44,7 +44,7 @@ export default function HomePage() {
       <PackagesPreview />
       <MembershipPreview />
       <TestimonialsSection />
-      <BeforeAfter />
+      <WorkGallery />
       <AppDownload />
       <BlogTeaser />
     </>

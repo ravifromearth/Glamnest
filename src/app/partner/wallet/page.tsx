@@ -57,7 +57,7 @@ export default function PartnerWalletPage() {
             </div>
             <p className="mt-3 font-display text-2xl font-bold text-ink-950">Mon, 20 Jul 2026</p>
             <p className="mt-2 text-sm text-ink-500">
-              To HDFC Bank ••4521 <span className="mx-1 text-ink-300">·</span> Sunita Devi
+              To HDFC Bank ••4521 <span className="mx-1 text-ink-300">·</span> Priyanka Singh
             </p>
             <Badge variant="gold" className="mt-4">
               Auto-settlement enabled

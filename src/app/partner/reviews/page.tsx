@@ -27,7 +27,7 @@ const REVIEWS = [
     service: "Engagement Makeup",
     date: "12 Jul 2026",
     quote:
-      "Sunita ji understood exactly the look I wanted for my engagement. The makeup lasted the whole evening and photographed beautifully.",
+      "Priyanka ji understood exactly the look I wanted for my engagement. The makeup lasted the whole evening and photographed beautifully.",
   },
   {
     name: "Anjali Sinha",

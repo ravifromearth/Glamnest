@@ -45,7 +45,7 @@ const QUICK_ACTIONS = [
 const RECENT_ACTIVITY = [
   { title: "Booking confirmed — Signature Glow Facial", detail: "18 Jul 2026, 11:00 AM · GN2026481253", time: "2 days ago", icon: BadgeCheck },
   { title: "₹75 cashback credited to wallet", detail: "UPI payment cashback on GN2026471102", time: "6 days ago", icon: Wallet },
-  { title: "You earned 40 glow points", detail: "Completed: Spa Mani-Pedi with Farhan Ali", time: "2 weeks ago", icon: Gift },
+  { title: "You earned 40 glow points", detail: "Completed: Spa Mani-Pedi with Sadhna Singh", time: "2 weeks ago", icon: Gift },
   { title: "Riya joined with your referral code", detail: "₹300 bonus will credit after her first booking", time: "3 weeks ago", icon: Users },
 ];
 
@@ -72,7 +72,7 @@ export default function AccountOverviewPage() {
                 Signature Glow Facial
               </h2>
               <p className="mt-1 text-sm text-cream-200/80">
-                Sat, 18 Jul 2026 · 11:00 AM · with Pooja Kumari
+                Sat, 18 Jul 2026 · 11:00 AM · with Babli Singh
               </p>
               <div className="mt-3 flex flex-wrap items-center gap-2">
                 <Badge variant="gold">Confirmed</Badge>
@@ -81,7 +81,7 @@ export default function AccountOverviewPage() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <Avatar initials="PK" />
+            <Avatar initials="BS" />
             <Link href="/account/bookings">
               <Button variant="outline-light" size="sm">
                 Manage
