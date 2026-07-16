@@ -4,7 +4,6 @@ import {
   BadgeCheck,
   CalendarDays,
   ChevronRight,
-  Gift,
   MessageCircle,
   Plus,
   Sparkles,
@@ -22,7 +21,7 @@ import { Button } from "@/components/ui/button";
 export const metadata: Metadata = {
   ...buildMetadata({
     title: "My Account",
-    description: "Your GlamNest dashboard — bookings, wallet, rewards and more.",
+    description: "Your GlamNest dashboard — bookings, wallet and more.",
     path: "/account",
   }),
   robots: { index: false, follow: false },
@@ -31,21 +30,18 @@ export const metadata: Metadata = {
 const QUICK_STATS = [
   { label: "Bookings", value: "12", icon: CalendarDays, href: "/account/bookings" },
   { label: "Wallet", value: formatINR(450), icon: Wallet, href: "/account/wallet" },
-  { label: "Glow points", value: "320", icon: Gift, href: "/account/rewards" },
   { label: "Coupons", value: "2", icon: Ticket, href: "/account/coupons" },
 ];
 
 const QUICK_ACTIONS = [
   { label: "Book a service", description: "Facials, hair, spa & more", icon: Plus, href: "/booking" },
   { label: "Refer & earn ₹300", description: "Share your code ANANYA300", icon: Users, href: "/account/referrals" },
-  { label: "Redeem points", description: "320 points waiting", icon: Gift, href: "/account/rewards" },
   { label: "Manage membership", description: "Luxe · renews 03 Aug", icon: Sparkles, href: "/account/membership" },
 ];
 
 const RECENT_ACTIVITY = [
   { title: "Booking confirmed — Signature Glow Facial", detail: "18 Jul 2026, 11:00 AM · GN2026481253", time: "2 days ago", icon: BadgeCheck },
   { title: "₹75 cashback credited to wallet", detail: "UPI payment cashback on GN2026471102", time: "6 days ago", icon: Wallet },
-  { title: "You earned 40 glow points", detail: "Completed: Spa Mani-Pedi with Sadhna Singh", time: "2 weeks ago", icon: Gift },
   { title: "Riya joined with your referral code", detail: "₹300 bonus will credit after her first booking", time: "3 weeks ago", icon: Users },
 ];
 
@@ -93,7 +89,7 @@ export default function AccountOverviewPage() {
       </section>
 
       {/* Quick stats */}
-      <section aria-label="Quick stats" className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+      <section aria-label="Quick stats" className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
         {QUICK_STATS.map((stat) => (
           <Link
             key={stat.label}

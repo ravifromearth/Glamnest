@@ -3,10 +3,10 @@
 export const ADMIN_SESSION_KEY = "glamnest-admin-session-v1";
 export const ADMIN_TTL_MS = 30 * 24 * 60 * 60 * 1000;
 
-/** Demo admin credentials — change in production. */
+/** Default admin credentials. */
 export const ADMIN_CREDENTIALS = {
   username: "admin",
-  password: "glamnest@admin",
+  password: "Admin@12345",
   name: "Admin",
 } as const;
 

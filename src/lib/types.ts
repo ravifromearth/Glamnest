@@ -35,6 +35,8 @@ export interface Service {
   highlights: string[];
   faqs: { question: string; answer: string }[];
   popular?: boolean;
+  /** When false, hidden from customer catalog/booking. Admin can override via local flags. */
+  enabled?: boolean;
 }
 
 export interface Category {

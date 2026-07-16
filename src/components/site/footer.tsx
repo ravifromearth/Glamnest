@@ -2,8 +2,8 @@ import Link from "next/link";
 import { Facebook, Instagram, Mail, MapPin, Phone, Twitter, Youtube } from "lucide-react";
 import { Logo } from "./logo";
 import { WhatsAppIcon } from "./whatsapp-button";
+import { FooterServicesNav } from "./footer-services-nav";
 import { BRAND, CITIES, whatsappHref } from "@/lib/brand";
-import { CATEGORIES } from "@/lib/catalog";
 
 const COMPANY_LINKS = [
   { label: "About Us", href: "/about" },
@@ -83,15 +83,7 @@ export function Footer() {
 
         <div>
           <h3 className="font-display text-sm font-semibold uppercase tracking-[0.18em] text-gold-500">Services</h3>
-          <ul className="mt-5 space-y-2.5 text-sm">
-            {CATEGORIES.slice(0, 8).map((cat) => (
-              <li key={cat.slug}>
-                <Link href={`/services/${cat.slug}`} className="text-cream-100/60 transition-colors hover:text-gold-400">
-                  {cat.name}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          <FooterServicesNav />
         </div>
 
         <div>

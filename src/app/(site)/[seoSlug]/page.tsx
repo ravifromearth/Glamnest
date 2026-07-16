@@ -58,7 +58,7 @@ export default async function SeoLandingPage({ params }: { params: Params }) {
   const isLive = city.status === "live";
   const services =
     page.serviceHint === "salon-at-home"
-      ? SERVICES.filter((s) => s.popular).slice(0, 6)
+      ? SERVICES.filter((s) => s.popular).filter((s) => s.enabled !== false).slice(0, 6)
       : getServicesByCategory(page.serviceHint).slice(0, 6);
   const displayServices = services.length > 0 ? services : SERVICES.slice(0, 6);
   const localFaqs = [

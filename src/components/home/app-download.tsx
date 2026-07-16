@@ -23,7 +23,7 @@ export function AppDownload() {
                 <span className="text-gold-gradient">Bookings In Two Taps</span>
               </h2>
               <p className="mt-4 max-w-md text-sm leading-relaxed text-cream-100/65">
-                Track your beautician live, manage your wallet and rewards, and rebook your
+                Track your beautician live, manage your wallet, and rebook your
                 favourite professional — all from the {BRAND.name} app.
               </p>
 
@@ -31,7 +31,7 @@ export function AppDownload() {
                 {[
                   { icon: CalendarCheck, label: "1-tap rebooking" },
                   { icon: Bell, label: "Live arrival alerts" },
-                  { icon: Wallet, label: "Wallet & rewards" },
+                  { icon: Wallet, label: "Wallet & bookings" },
                 ].map((f) => (
                   <div key={f.label} className="rounded-2xl border border-white/8 bg-white/[0.04] p-3">
                     <f.icon className="mx-auto size-5 text-gold-400" />

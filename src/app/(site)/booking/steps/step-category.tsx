@@ -1,12 +1,19 @@
 "use client";
 
+import { useEffect } from "react";
 import { useBookingStore } from "@/stores/booking-store";
-import { CATEGORIES } from "@/lib/catalog";
+import { useLiveCategories, useServiceFlagsStore } from "@/stores/service-flags-store";
 import { cn } from "@/lib/utils";
 import { StepHeader } from "./step-header";
 
 export function StepCategory() {
   const { categorySlug, selectCategory } = useBookingStore();
+  const liveCategories = useLiveCategories();
+  const hydrate = useServiceFlagsStore((s) => s.hydrate);
+
+  useEffect(() => {
+    hydrate();
+  }, [hydrate]);
 
   return (
     <section aria-label="Choose a category">
@@ -17,7 +24,7 @@ export function StepCategory() {
       />
 
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-5">
-        {CATEGORIES.map((category) => {
+        {liveCategories.map((category) => {
           const selected = categorySlug === category.slug;
           return (
             <button

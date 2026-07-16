@@ -30,9 +30,9 @@ export const CATEGORIES: Category[] = [
   },
   {
     slug: "hair",
-    name: "Haircut & Styling",
+    name: "Hair Care",
     shortName: "Hair",
-    description: "Cuts, blowouts, keratin, smoothening and global colour by senior stylists at your doorstep.",
+    description: "Blowouts, keratin, smoothening and global colour by senior stylists at your doorstep.",
     icon: "Scissors",
     gradient: "from-amber-100 via-cream-100 to-cream-50",
     emoji: "💇‍♀️",
@@ -234,7 +234,8 @@ export const SERVICES: Service[] = [
     reviewCount: 1240,
     gradient: "from-amber-100 to-cream-100",
     emoji: "💇‍♀️",
-    popular: true,
+    popular: false,
+    enabled: false,
     packages: [
       { id: "cut-essential", name: "Classic Cut", tier: "essential", price: 599, strikePrice: 799, durationMin: 45, popular: true, includes: ["Consultation", "Shampoo-ready cut", "Blow-dry finish"] },
       { id: "cut-premium", name: "Cut + Style", tier: "premium", price: 999, strikePrice: 1299, durationMin: 70, includes: ["Advanced cut (layers/steps)", "Wash + conditioning", "Ironing or curls"] },
@@ -606,14 +607,24 @@ export function getCategory(slug: string) {
   return CATEGORIES.find((c) => c.slug === slug);
 }
 
-export function getServicesByCategory(categorySlug: string) {
-  return SERVICES.filter((s) => s.categorySlug === categorySlug);
+export function getServicesByCategory(categorySlug: string, opts?: { includeDisabled?: boolean }) {
+  return SERVICES.filter(
+    (s) => s.categorySlug === categorySlug && (opts?.includeDisabled || s.enabled !== false)
+  );
 }
 
-export function getService(categorySlug: string, slug: string) {
-  return SERVICES.find((s) => s.categorySlug === categorySlug && s.slug === slug);
+export function getService(categorySlug: string, slug: string, opts?: { includeDisabled?: boolean }) {
+  const service = SERVICES.find((s) => s.categorySlug === categorySlug && s.slug === slug);
+  if (!service) return undefined;
+  if (!opts?.includeDisabled && service.enabled === false) return undefined;
+  return service;
 }
 
-export function getPopularServices() {
-  return SERVICES.filter((s) => s.popular);
+export function getPopularServices(opts?: { includeDisabled?: boolean }) {
+  return SERVICES.filter((s) => s.popular && (opts?.includeDisabled || s.enabled !== false));
+}
+
+export function isServiceEnabledByDefault(slug: string) {
+  const service = SERVICES.find((s) => s.slug === slug);
+  return service ? service.enabled !== false : false;
 }

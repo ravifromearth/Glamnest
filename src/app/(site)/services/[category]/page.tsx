@@ -2,9 +2,9 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, BadgeCheck, ShieldCheck, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ServiceCard } from "@/components/site/service-card";
 import { SectionHeading } from "@/components/site/section-heading";
 import { Accordion } from "@/components/ui/accordion";
+import { EnabledServiceGrid } from "@/components/site/enabled-service-grid";
 import { CATEGORIES, getCategory, getServicesByCategory } from "@/lib/catalog";
 import { buildMetadata, breadcrumbJsonLd, faqJsonLd, jsonLdScriptProps } from "@/lib/seo";
 import { cn, formatINR } from "@/lib/utils";
@@ -30,8 +30,8 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
   const cat = getCategory(category);
   if (!cat) notFound();
 
-  const services = getServicesByCategory(cat.slug);
-  const faqs = services.flatMap((s) => s.faqs).slice(0, 5);
+  const services = getServicesByCategory(cat.slug, { includeDisabled: true });
+  const faqs = services.filter((s) => s.enabled !== false).flatMap((s) => s.faqs).slice(0, 5);
   const otherCategories = CATEGORIES.filter((c) => c.slug !== cat.slug).slice(0, 6);
 
   return (
@@ -80,11 +80,7 @@ export default async function CategoryPage({ params }: { params: Promise<{ categ
       {/* Services */}
       <section className="section-gn">
         <div className="container-gn">
-          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {services.map((service) => (
-              <ServiceCard key={service.slug} service={service} />
-            ))}
-          </div>
+          <EnabledServiceGrid services={services} />
 
           <div className="mt-12 rounded-3xl bg-ink-950 p-8 text-center text-cream-50 md:p-10">
             <h2 className="font-display text-2xl font-bold">

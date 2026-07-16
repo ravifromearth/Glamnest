@@ -73,7 +73,7 @@ export function AdminLoginForm() {
               autoComplete="current-password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••"
+              placeholder="A@15"
               required
             />
           </div>

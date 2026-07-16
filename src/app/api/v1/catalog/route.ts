@@ -10,7 +10,7 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const category = searchParams.get("category");
 
-  const services = category ? SERVICES.filter((s) => s.categorySlug === category) : SERVICES;
+  const services = category ? SERVICES.filter((s) => s.categorySlug === category && s.enabled !== false) : SERVICES.filter((s) => s.enabled !== false);
 
   return NextResponse.json(
     {

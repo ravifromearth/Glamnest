@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { CalendarDays, Gift, Home, LayoutGrid, UserRound } from "lucide-react";
+import { CalendarDays, Home, LayoutGrid, UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const TABS = [
   { label: "Home", href: "/", icon: Home },
   { label: "Services", href: "/services", icon: LayoutGrid },
   { label: "Bookings", href: "/account/bookings", icon: CalendarDays },
-  { label: "Rewards", href: "/account/rewards", icon: Gift },
   { label: "Profile", href: "/account", icon: UserRound },
 ];
 
@@ -27,7 +26,7 @@ export function MobileTabBar() {
       className="glass fixed inset-x-0 bottom-0 z-50 border-t border-ink-950/8 pb-[env(safe-area-inset-bottom)] md:hidden"
       aria-label="App navigation"
     >
-      <div className="grid h-16 grid-cols-5">
+      <div className="grid h-16 grid-cols-4">
         {TABS.map((tab) => {
           const active =
             tab.href === "/" ? pathname === "/" : pathname === tab.href || pathname.startsWith(tab.href + "/");

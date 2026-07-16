@@ -6,9 +6,9 @@ import { usePathname } from "next/navigation";
 import { ChevronDown, MapPin, Menu, Phone, X } from "lucide-react";
 import { Logo } from "./logo";
 import { Button } from "@/components/ui/button";
-import { CATEGORIES } from "@/lib/catalog";
 import { BRAND } from "@/lib/brand";
 import { useAuthStore } from "@/stores/auth-store";
+import { useLiveCategories } from "@/stores/service-flags-store";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -28,6 +28,7 @@ export function Header() {
   const user = useAuthStore((s) => s.user);
   const hydrated = useAuthStore((s) => s.hydrated);
   const signOut = useAuthStore((s) => s.signOut);
+  const liveCategories = useLiveCategories();
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 12);
@@ -94,7 +95,7 @@ export function Header() {
                     )}
                   >
                     <div className="grid grid-cols-2 gap-1 rounded-3xl border border-ink-950/8 bg-white p-3 shadow-lift">
-                      {CATEGORIES.map((cat) => (
+                      {liveCategories.map((cat) => (
                         <Link
                           key={cat.slug}
                           href={`/services/${cat.slug}`}
@@ -183,7 +184,7 @@ export function Header() {
           <nav className="container-gn flex flex-col gap-1 py-4" aria-label="Mobile">
             <p className="px-3 pb-1 pt-2 text-xs font-semibold uppercase tracking-wider text-ink-400">Services</p>
             <div className="grid grid-cols-2 gap-1">
-              {CATEGORIES.slice(0, 8).map((cat) => (
+              {liveCategories.slice(0, 8).map((cat) => (
                 <Link
                   key={cat.slug}
                   href={`/services/${cat.slug}`}

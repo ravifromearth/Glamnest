@@ -1,12 +1,26 @@
+"use client";
+
+import { useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { SectionHeading } from "@/components/site/section-heading";
 import { ServiceCard } from "@/components/site/service-card";
 import { Button } from "@/components/ui/button";
-import { CATEGORIES, getPopularServices } from "@/lib/catalog";
+import { SERVICES } from "@/lib/catalog";
+import { useLiveCategories, useServiceFlagsStore } from "@/stores/service-flags-store";
 
 export function PopularServices() {
-  const services = getPopularServices().slice(0, 8);
+  const hydrate = useServiceFlagsStore((s) => s.hydrate);
+  const isEnabled = useServiceFlagsStore((s) => s.isEnabled);
+  const flags = useServiceFlagsStore((s) => s.flags);
+  const liveCategories = useLiveCategories();
+  void flags;
+
+  useEffect(() => {
+    hydrate();
+  }, [hydrate]);
+
+  const services = SERVICES.filter((s) => s.popular && isEnabled(s.slug)).slice(0, 8);
 
   return (
     <section className="section-gn">
@@ -17,9 +31,8 @@ export function PopularServices() {
           description="The rituals Patna books again and again — delivered at home with sealed kits and senior professionals."
         />
 
-        {/* Category quick nav */}
         <div className="no-scrollbar -mx-5 mb-10 flex gap-2 overflow-x-auto px-5 sm:mx-0 sm:flex-wrap sm:justify-center sm:px-0">
-          {CATEGORIES.map((cat) => (
+          {liveCategories.map((cat) => (
             <Link
               key={cat.slug}
               href={`/services/${cat.slug}`}
@@ -39,8 +52,8 @@ export function PopularServices() {
 
         <div className="mt-12 text-center">
           <Link href="/services">
-            <Button size="lg" variant="outline">
-              View All Services <ArrowRight className="size-4" />
+            <Button variant="outline" size="lg">
+              View all services <ArrowRight className="size-4" />
             </Button>
           </Link>
         </div>
